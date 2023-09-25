@@ -1,0 +1,15 @@
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/bin/Debug/net6.0/lab1a
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/bin/Debug/net6.0/lab1a.deps.json
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/bin/Debug/net6.0/lab1a.runtimeconfig.json
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/bin/Debug/net6.0/lab1a.dll
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/bin/Debug/net6.0/ref/lab1a.dll
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/bin/Debug/net6.0/lab1a.pdb
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.csproj.AssemblyReference.cache
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.GeneratedMSBuildEditorConfig.editorconfig
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.AssemblyInfoInputs.cache
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.AssemblyInfo.cs
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.csproj.CoreCompileInputs.cache
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.dll
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/ref/lab1a.dll
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.pdb
+/home/zaio/src/lygiagretus_prog/lab1/lab1a/obj/Debug/net6.0/lab1a.genruntimeconfig.cache
