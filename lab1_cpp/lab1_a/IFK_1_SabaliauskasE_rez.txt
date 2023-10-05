@@ -1,32 +1,23 @@
 Modelis                  |Metai     |Darbinis tūris |Skaičiuota Reikšmė|
 -------------------------|----------|---------------|-------------------
-Subaru Outback           |      2019|            1.0|              2034|
-Lexus RX                 |      2019|            3.5|              2030|
-Kia Optima               |      2018|            2.0|              2030|
-Buick Encore             |      2016|            2.6|              2030|
-Chevrolet Silverado      |      2016|            1.5|              2036|
-Honda Accord             |      2016|            2.5|              2030|
-Ford Mustang             |      2014|            2.5|              2028|
-Nissan Altima            |      2012|            1.6|              2026|
-Jeep Wrangler            |      2012|            1.0|              2026|
-Honda Civic              |      2011|            2.5|              2024|
-Hyundai Elantra          |      2010|            1.5|              2026|
-Mazda3                   |      2010|            2.6|              2018|
+Jeep Wrangler            |      2020|            3.5|              2036|
+Tesla Model 3            |      2020|            3.5|              2036|
+Volkswagen Passat        |      2019|            2.0|              2038|
+Kia Optima               |      2017|            3.6|              2030|
+Acura MDX                |      2015|            2.6|              2026|
+Ford F-150               |      2015|            3.6|              2028|
+Ford Mustang             |      2015|            3.5|              2030|
+Nissan Rogue             |      2014|            2.5|              2028|
+Lexus RX                 |      2013|            3.5|              2024|
+Mazda3                   |      2012|            2.5|              2020|
+Honda Civic              |      2011|            2.6|              2024|
+Chevrolet Silverado      |      2010|            1.0|              2030|
 Audi A4                  |      2010|            3.5|              2020|
-Fiat 500                 |      2009|            3.6|              2020|
-Hyundai Sonata           |      2009|            3.6|              2026|
-Toyota Corolla           |      2009|            1.5|              2024|
-Mercedes-Benz C-Class    |      2008|            1.6|              2030|
-Dodge Charger            |      2007|            2.5|              2022|
-Toyota Camry             |      2007|            1.6|              2020|
-Nissan Rogue             |      2005|            3.5|              2020|
-Acura MDX                |      2004|            1.0|              2014|
-Ford F-150               |      2003|            3.5|              2016|
-Volkswagen Passat        |      2002|            1.0|              2020|
-Chevrolet Malibu         |      2002|            2.0|              2020|
-Volkswagen Jetta         |      2002|            2.0|              2020|
-BMW 3 Series             |      2001|            1.5|              2014|
-Cadillac Escalade        |      2001|            2.0|              2020|
-GMC Sierra               |      2001|            3.5|              2014|
-Volvo XC90               |      2001|            3.6|              2014|
-Tesla Model 3            |      2000|            3.5|              2016|
+Volkswagen Jetta         |      2009|            3.6|              2028|
+Subaru Outback           |      2007|            1.6|              2022|
+Toyota Corolla           |      2006|            2.0|              2022|
+Volvo XC90               |      2005|            3.6|              2018|
+Toyota Camry             |      2005|            3.6|              2020|
+Chevrolet Malibu         |      2005|            1.6|              2022|
+Honda Accord             |      2005|            3.0|              2020|
+Hyundai Elantra          |      2004|            1.5|              2020|

@@ -3,7 +3,7 @@
 
 #include <mutex>
 #include <condition_variable>
-#include "car.h"
+#include "Car.h"
 
 class DataMonitor
 {
@@ -18,6 +18,7 @@ public:
     DataMonitor(int cap);
     void insert(car c);
     car remove();
+    bool is_empty();
     int size();
 };
 #endif

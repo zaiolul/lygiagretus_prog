@@ -1,4 +1,4 @@
-#include "car.h"
+#include "Car.h"
 #include <condition_variable>
 #include <mutex>
 
@@ -9,10 +9,9 @@ private:
     int *calculated_values;
     int count;
     std::mutex mut;
-    std::condition_variable cv;
 public:
     ResultsMonitor(int cap);
-    void insert_sorted(car c, int calculated_value);
-    void set_data(car **c, int **d);
+    void insert_sorted(car c);
+    void set_data(car **c);
     int size();
 };
