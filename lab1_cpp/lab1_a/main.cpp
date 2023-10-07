@@ -10,7 +10,7 @@
 
 using json = nlohmann::json;
 
-#define THREAD_COUNT 6
+#define THREAD_COUNT 4
 
 #define RESULTS_COUNT 255
 #define DATA_COUNT 5
@@ -23,12 +23,27 @@ using json = nlohmann::json;
 #define ITERATIONS = 100
 #endif
 
+bool finished = false;
+std::mutex mut;
+
+bool is_finished(bool set){
+    std::unique_lock<std::mutex> guard(mut);
+    if(set){
+        finished = true;
+    }
+    return finished == true;
+}
+
+void set_finished(){
+     std::unique_lock<std::mutex> guard(mut);
+     finished = true;
+}
 int calc(car c)
 {   
     int result = 1;
     int number = c.model.length() + c.year + int(c.engine_volume);
     for(int i = 1; i <= number ; i ++){
-        for(int j = 0; j < number * 100 ; j ++){
+        for(int j = 0; j < number  ; j ++){
             result += i;
         }
         result = i ;
@@ -58,12 +73,16 @@ void print_results(std::ofstream &out, ResultsMonitor *results)
 void thread_func(DataMonitor *data_m, ResultsMonitor *results_m)
 {
     int count = 0;
-    while(1){
+    while(!is_finished(false)){
         car c = data_m->remove();
+        // if(c.year == 0){
+        //     std::cout << "rasta illegal reiksme, visko apdorota: "<< count << std::endl;
+        //     break;
+        // }
+            
         c.calculated_value = calc(c);
-        std::cout << c.year << std::endl;
-        if(c.year == 0)
-            break;
+       // std::cout << c.year << std::endl;
+       
         if(c.calculated_value % 2 != 0) // salyga, tik lyginiai
             continue;
         results_m->insert_sorted(c);
@@ -85,42 +104,35 @@ for(int i = 0; i < 200; i ++){
 
     DataMonitor data_m(DATA_COUNT);
     ResultsMonitor results_m(RESULTS_COUNT);
-
-    
    
     for (auto& it : data) {
         car c = car{.model = it["model"], .year = it["year"], .engine_volume = it["enginevolume"]};
 		car_data.push_back(c);
 	}
-    for(int i = 0; i < THREAD_COUNT; i ++){
-       car_data.push_back(car{});
-    }
-     for(car c : car_data){
-        std::cout << c.model << " " << c.year << std::endl;
-    }
+  
+    // for(int i = 0; i < THREAD_COUNT ; i ++){
+    //    car_data.push_back(car{});
+    // }
     
-
     std::vector<std::thread> threads;
     for(int i = 0; i < THREAD_COUNT; i ++){
         threads.push_back(std::thread(thread_func, &data_m, &results_m));
     }
     for(car c : car_data){
+        std::cout << c.model << " " << c.year << std::endl;
         data_m.insert((c));
     }
-    
-    std::cout << "po inserto" << std::endl;
+
+    while(!data_m.is_empty());
+    is_finished(true);
+    // std::cout << "po inserto" << std::endl;
    
     for (int i = 0; i < THREAD_COUNT; i++) {
 	
     	threads[i].join();
 	}
     std::cout << "data empty po visko: " << data_m.size() << std::endl;
-    int n = data_m.size();
-    for(int i = 0; i < n; i ++)
-    {
-        car c = data_m.remove();
-        std::cout << c.model << " " << c.year << std::endl;
-    }
+   
     std::ofstream out(OUTPUT_FILE);
     print_results(out, &results_m);
     //out.close();

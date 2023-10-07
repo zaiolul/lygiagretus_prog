@@ -11,7 +11,8 @@ private:
     int capacity;
     struct car *cars;
     int count;
-    int last_index;
+    int front;
+    int rear;
     std::mutex mut;
     std::condition_variable cv;
 public:
