@@ -10,8 +10,6 @@
 
 using json = nlohmann::json;
 
-#define THREAD_COUNT 4
-
 #define RESULTS_COUNT 255
 #define DATA_COUNT 5
 
@@ -34,16 +32,12 @@ bool is_finished(bool set){
     return finished == true;
 }
 
-void set_finished(){
-     std::unique_lock<std::mutex> guard(mut);
-     finished = true;
-}
 int calc(car c)
 {   
     int result = 1;
     int number = c.model.length() + c.year + int(c.engine_volume);
     for(int i = 1; i <= number ; i ++){
-        for(int j = 0; j < number  ; j ++){
+        for(int j = 0; j < number  *100; j ++){
             result += i;
         }
         result = i ;
@@ -73,12 +67,11 @@ void print_results(std::ofstream &out, ResultsMonitor *results)
 void thread_func(DataMonitor *data_m, ResultsMonitor *results_m)
 {
     int count = 0;
-    while(!is_finished(false)){
+    while(true){
         car c = data_m->remove();
-        // if(c.year == 0){
-        //     std::cout << "rasta illegal reiksme, visko apdorota: "<< count << std::endl;
-        //     break;
-        // }
+        if(c.year == 0){
+            break;
+        }
             
         c.calculated_value = calc(c);
        // std::cout << c.year << std::endl;
@@ -124,7 +117,9 @@ for(int i = 0; i < 200; i ++){
     }
 
     while(!data_m.is_empty());
-    is_finished(true);
+    for (int i = 0; i < THREAD_COUNT; i++) {
+        data_m.insert(car{});
+    }
     // std::cout << "po inserto" << std::endl;
    
     for (int i = 0; i < THREAD_COUNT; i++) {
@@ -135,7 +130,7 @@ for(int i = 0; i < 200; i ++){
    
     std::ofstream out(OUTPUT_FILE);
     print_results(out, &results_m);
-    //out.close();
+    out.close();
 #ifdef RUN_TEST
     }
 #endif
