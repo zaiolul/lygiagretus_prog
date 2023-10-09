@@ -15,7 +15,7 @@ using json = nlohmann::json;
 #define RESULTS_COUNT 255
 #define DATA_COUNT 5
 
-#define OUTPUT_FILE "../IFK_1_SabaliauskasE_rez.txt"
+#define OUTPUT_FILE "../../IFK_1_SabaliauskasE_rez.txt"
 /* RUN TEST */
 // #define RUN_TEST
 /*----------*/
