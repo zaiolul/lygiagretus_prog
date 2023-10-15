@@ -36,6 +36,19 @@ bool DataMonitor::is_empty()
     return count == 0;
 }
 
+void DataMonitor::insert_first(car c)
+{
+    std::unique_lock<std::mutex> guard(mut);
+	cv.wait(guard, [&]{ return count < capacity;});
+    count ++;
+    for(int i = count - 1; i >= 1; i --)
+    {
+        cars[i] = cars[i - 1];
+    }
+    cars[0] = c;
+   
+    cv.notify_all();
+}
 int DataMonitor::size(){
     return count;
 }

@@ -37,7 +37,7 @@ int calc(car c)
     int result = 1;
     int number = c.model.length() + c.year + int(c.engine_volume);
     for(int i = 1; i <= number ; i ++){
-        for(int j = 0; j < number  *100; j ++){
+        for(int j = 0; j < number  *10; j ++){
             result += i;
         }
         result = i ;
@@ -70,6 +70,7 @@ void thread_func(DataMonitor *data_m, ResultsMonitor *results_m)
     while(true){
         car c = data_m->remove();
         if(c.year == 0){
+            std::cout << "breaking" << std::endl;
             break;
         }
             
@@ -103,10 +104,6 @@ for(int i = 0; i < 200; i ++){
 		car_data.push_back(c);
 	}
   
-    // for(int i = 0; i < THREAD_COUNT ; i ++){
-    //    car_data.push_back(car{});
-    // }
-    
     std::vector<std::thread> threads;
     for(int i = 0; i < THREAD_COUNT; i ++){
         threads.push_back(std::thread(thread_func, &data_m, &results_m));
@@ -115,24 +112,24 @@ for(int i = 0; i < 200; i ++){
         std::cout << c.model << " " << c.year << std::endl;
         data_m.insert((c));
     }
-
-    while(!data_m.is_empty());
+    
     for (int i = 0; i < THREAD_COUNT; i++) {
-        data_m.insert(car{});
+        data_m.insert_first(car{});
     }
-    // std::cout << "po inserto" << std::endl;
    
     for (int i = 0; i < THREAD_COUNT; i++) {
 	
     	threads[i].join();
 	}
-    std::cout << "data empty po visko: " << data_m.size() << std::endl;
+    std::cout << "data size: " << data_m.size() << std::endl;
    
     std::ofstream out(OUTPUT_FILE);
     print_results(out, &results_m);
     out.close();
+
 #ifdef RUN_TEST
     }
 #endif
+
     return 0;
 }

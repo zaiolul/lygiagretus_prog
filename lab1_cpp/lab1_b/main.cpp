@@ -15,7 +15,7 @@ int calc(car c)
     int result = 1;
     int number = c.model.length() + c.year + int(c.engine_volume);
     for(int i = 1; i <= number ; i ++){
-        for(int j = 0; j < number *100 ; j ++){
+        for(int j = 0; j < number *10; j ++){
             result += i;
         }
         result = i;
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
         end += n;
         range[i][0] = start;
         range[i][1] = end;
-        std::cout << i << " threadas: [" << start << ";" << end << "), viso kiekis: " << end - start - 1 << std::endl;
+        std::cout << i << " threadas: [" << start << ";" << end << "), viso kiekis: " << end - start << std::endl;
     }
     //--------------------------------------
     std::vector<car> results;
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     float sum_float = 0;
     int sum_int = 0;
 
-#pragma omp parallel num_threads(THREAD_COUNT) reduction(+:sum_int, sum_float) shared(range, results, car_data)
+#pragma omp parallel num_threads(THREAD_COUNT) reduction(+:sum_int, sum_float) 
     {
         int thread_num = omp_get_thread_num();
         int start = range[thread_num][0];

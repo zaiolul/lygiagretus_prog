@@ -21,5 +21,6 @@ public:
     car remove();
     bool is_empty();
     int size();
+    void insert_first(car c);
 };
 #endif

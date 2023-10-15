@@ -2,7 +2,7 @@
 #define CAR_H
 #include <string>
 
-#define THREAD_COUNT 6
+#define THREAD_COUNT 8
 
 struct car{
     std::string model;
