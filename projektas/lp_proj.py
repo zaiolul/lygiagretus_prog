@@ -33,53 +33,42 @@ def loc_price(pos):
 
     return ((x1**4 + y1**4) / 1000) + ((np.sin(x1) + np.cos(y1)) / 5) + 0.4
 
-def target(base, new):
+def _target(args):
+    base = args[0]
+    new = args[1]
+    current = args[2]
+
+
     n_base = len(base)
     n_new = len(new)
-    sum = 0
-    for i in range(n_new):
-        sum += loc_price(new[i])
-        for j in  range(n_base):
-            sum += distance(new[i], base[j])
+    sum = loc_price(new[current])
+    for i in range(n_base):
+        sum += distance(new[current], base[i])
             
 
     for i in range(n_new):
-        for j in range(i + 1, n_new):
-            sum += distance(new[i], new[j])
+        if i == current:
+            continue
+        sum += distance(new[current], new[i])
     return sum
 
-def gradient_calc(base, new, h, f0):
-    
-    point = np.zeros(2)
-    for j in range (2): 
-        temp = np.copy(new)
-        temp[j] += h
-        f1 = target(base, temp)
-        point[j] = (f1 - f0) / h;
-    return point
 
-def numerical_gradient(base, new, h):
-    f0 = target(base, new)
+
+def target(base, new, pool):
+    args_list = [(base, new, i) for i,_ in enumerate(new)]
+    res = pool.imap(_target, args_list, 3)
+    return sum(res)
+    
+
+def numerical_gradient(base, new, h, pool):
+    f0 = target(base, new, pool)
     G = np.zeros(shape=(len(new), 2))
-    # with Pool(processes=os.cpu_count()) as pool:
-    #     results = []
-        # for i in range(len(new)):
-            # results.append(pool.apply(gradient_calc, [base, new, h, f0]))
-        # G = pool.starmap(gradient_calc, [])   
-            # print(results[i].get())
-        # for j in range (2): 
-        
-        #     temp = np.copy(new)
-        #     temp[i,j] += h
-        #     f1 = target(base, temp)
-        #     G[i, j] = (f1 - f0) / h;
-        # (x.wait() for x in results)
-  
-        # G = list((x.get() for x in results))
-        # pool.close()
-        # pool.join()
-       
-    print(G)
+    for i in range(len(new)):
+        for j in range (2): 
+            temp = np.copy(new)
+            temp[i,j] += h
+            f1 = target(base, temp, pool)
+            G[i, j] = (f1 - f0) / h;
     norm = np.linalg.norm(G)
     G = G / norm
 
@@ -90,11 +79,11 @@ def parse_args():
                               description="LP projektas",
                               usage="./lp_proj.py [-p PROCESSES] -i INPUT_FILE -o OUTPUT_FILE")
     parser.add_argument("-p", default=4,
-                      help="Process count (default 4)")
+                      help="Process count (default 4)", type=int)
     parser.add_argument("-i", required=True,
-                      help="Input data file")
-    parser.add_argument("-o", required=True,
-                      help="Output file")
+                      help="Input data file", type=str)
+    # parser.add_argument("-o", required=True,
+    #                   help="Output file", type=str)
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -107,45 +96,55 @@ if __name__ == "__main__":
     
     # print("base:\n", data["base"])
     # print("new:\n", data["new"])
-
+  
     
     base_shops = np.array(data["base"])
     new_shops = np.array(data["new"])
 
-  
+    np.random.seed(11)
 
-    draw(base_shops, new_shops, limit)
+    # n_base = 2
+
+    # n_new = 2
+
+    # base_shops = np.random.uniform(-10, 10, (n_base, 2)) 
+    # new_shops = np.random.uniform(-10, 10, (n_new, 2)) 
+
+    pool = Pool(args.p)
+  
+    # draw(base_shops, new_shops, limit)
 
     itmax = 1000
     step = 0.2
 
     h = 0.001
 
-    fx = target(base_shops, new_shops)
+    fx = target(base_shops, new_shops, pool)
 
     f_vals = []
   
     for i in range(itmax):
-        G = numerical_gradient(base_shops, new_shops, h)
+        G = numerical_gradient(base_shops, new_shops, h, pool)
         new_shops -=  step * G
-        fx1 = target(base_shops, new_shops)
-        f_vals.append(fx1)
+        fx1 = target(base_shops, new_shops, pool)
+        # f_vals.append(fx1)
         
         if fx1 > fx:
             new_shops +=  step * G
             step = step * 0.9
-            print('fx1 = ', fx1, 'step = ', step, 'i =', i)
+            # print('fx1 = ', fx1, 'step = ', step, 'i =', i)
         
         else:
             fx = fx1
 
         if step < eps:
-            print("optimizavimas baigtas, fx =", fx, ",iteraciju skaicius:", i )
+            # print("optimizavimas baigtas, fx =", fx, ",iteraciju skaicius:", i )
             break
 
-    draw(base_shops, new_shops, limit)
-    print(new_shops)
-
+    # draw(base_shops, new_shops, limit)
+    # print(new_shops)
+    pool.close()
+    pool.join()
 # plt.plot(its, f_vals)
 # plt.xlabel("iteracijos")
 # plt.ylabel("tikslo funkcijos reikšmė")
