@@ -102,19 +102,19 @@ if __name__ == "__main__":
 
     # fx = target(base_shops, new_shops, pool)
   
-    # for i in range(itmax):
-    #     gradient = numerical_gradient(base_shops, new_shops, h, pool)
-    #     new_shops -=  step * gradient
-    #     fx1 = target(base_shops, new_shops, pool)
-    #     # f_vals.append(fx1)
+    for i in range(itmax):
+        gradient = numerical_gradient(base_shops, new_shops, h, pool)
+        new_shops -=  step * gradient
+        fx1 = target(base_shops, new_shops, pool)
+        # f_vals.append(fx1)
         
-    #     if fx1 > fx:
-    #         new_shops +=  step * gradient
-    #         step = step * 0.9
-    #     else:
-    #         fx = fx1
-    #     if step < eps:
-    #         break
+        if fx1 > fx:
+            new_shops +=  step * gradient
+            step = step * 0.9
+        else:
+            fx = fx1
+        if step < eps:
+            break
 
     # # draw(base_shops, new_shops, limit)
     # # print(new_shops)
