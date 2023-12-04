@@ -85,7 +85,7 @@ if __name__ == "__main__":
     args = parse_args()
     eps = 1e-8
     limit = 10 # n x n area
-    file_path = "{0}/data/{1}".format(os.path.dirname(os.path.realpath(__file__)),args.i)
+    file_path = "{0}/{1}".format(os.path.dirname(os.path.realpath(__file__)),args.i)
     file = open(file_path)
     data = json.load(file)
   
