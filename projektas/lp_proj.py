@@ -9,14 +9,15 @@ from multiprocessing import Pool
 
 def draw(base, new, limit):
    
-    plt.plot(base[:,0],base[:,1], '.r', label='Esamos parduotuvės', linestyle = 'None')
-    plt.plot(new[:,0],new[:,1], '.b',   label='Naujos parduotuvės', linestyle = 'None')
-   
+    plt.plot(base[:,0],base[:,1], 'or', label='Senos parduotuvės', linestyle = 'None')
+    plt.plot(new[:,0],new[:,1], 'ob',   label='Naujos parduotuvės', linestyle = 'None')
+    plt.xlabel("x")
+    plt.ylabel("y")
     plt.xlim([-limit-2, limit+2])
     plt.ylim([-limit-2, limit+2])
     plt.plot([-limit, -limit, limit, limit, -limit], [-limit, limit, limit, -limit, -limit],'--k') 
     plt.grid()
-    plt.legend()
+    plt.legend(loc="upper right")
     plt.show()
 
 def distance(pos1, pos2):
@@ -38,41 +39,36 @@ def _target(args):
     new = args[1]
     current = args[2]
 
-
     n_base = len(base)
     n_new = len(new)
     sum = loc_price(new[current])
     for i in range(n_base):
         sum += distance(new[current], base[i])
             
-
     for i in range(n_new):
         if i == current:
             continue
         sum += distance(new[current], new[i])
     return sum
 
-
-
 def target(base, new, pool):
     args_list = [(base, new, i) for i,_ in enumerate(new)]
-    res = pool.imap(_target, args_list, 3)
+    res = pool.map(_target, args_list)
     return sum(res)
-    
 
 def numerical_gradient(base, new, h, pool):
     f0 = target(base, new, pool)
-    G = np.zeros(shape=(len(new), 2))
+    gradient = np.zeros(shape=(len(new), 2))
     for i in range(len(new)):
-        for j in range (2): 
+        for j in range (2): #x and y
             temp = np.copy(new)
             temp[i,j] += h
             f1 = target(base, temp, pool)
-            G[i, j] = (f1 - f0) / h;
-    norm = np.linalg.norm(G)
-    G = G / norm
+            gradient[i, j] = (f1 - f0) / h;
+    norm = np.linalg.norm(gradient)
+    gradient = gradient / norm
 
-    return G 
+    return gradient 
 
 def parse_args():
     parser = arg.ArgumentParser(prog="lp_proj",
@@ -85,7 +81,7 @@ def parse_args():
     # parser.add_argument("-o", required=True,
     #                   help="Output file", type=str)
     return parser.parse_args()
-
+    
 if __name__ == "__main__":
     args = parse_args()
     eps = 1e-8
@@ -93,59 +89,35 @@ if __name__ == "__main__":
     file_path = "{0}/data/{1}".format(os.path.dirname(os.path.realpath(__file__)),args.i)
     file = open(file_path)
     data = json.load(file)
-    
-    # print("base:\n", data["base"])
-    # print("new:\n", data["new"])
   
-    
     base_shops = np.array(data["base"])
     new_shops = np.array(data["new"])
-
-    np.random.seed(11)
-
-    # n_base = 2
-
-    # n_new = 2
-
-    # base_shops = np.random.uniform(-10, 10, (n_base, 2)) 
-    # new_shops = np.random.uniform(-10, 10, (n_new, 2)) 
-
     pool = Pool(args.p)
-  
+    print(len(base_shops), len(new_shops))
     # draw(base_shops, new_shops, limit)
 
     itmax = 1000
     step = 0.2
-
     h = 0.001
 
-    fx = target(base_shops, new_shops, pool)
-
-    f_vals = []
+    # fx = target(base_shops, new_shops, pool)
   
-    for i in range(itmax):
-        G = numerical_gradient(base_shops, new_shops, h, pool)
-        new_shops -=  step * G
-        fx1 = target(base_shops, new_shops, pool)
-        # f_vals.append(fx1)
+    # for i in range(itmax):
+    #     gradient = numerical_gradient(base_shops, new_shops, h, pool)
+    #     new_shops -=  step * gradient
+    #     fx1 = target(base_shops, new_shops, pool)
+    #     # f_vals.append(fx1)
         
-        if fx1 > fx:
-            new_shops +=  step * G
-            step = step * 0.9
-            # print('fx1 = ', fx1, 'step = ', step, 'i =', i)
-        
-        else:
-            fx = fx1
+    #     if fx1 > fx:
+    #         new_shops +=  step * gradient
+    #         step = step * 0.9
+    #     else:
+    #         fx = fx1
+    #     if step < eps:
+    #         break
 
-        if step < eps:
-            # print("optimizavimas baigtas, fx =", fx, ",iteraciju skaicius:", i )
-            break
-
-    # draw(base_shops, new_shops, limit)
-    # print(new_shops)
+    # # draw(base_shops, new_shops, limit)
+    # # print(new_shops)
     pool.close()
     pool.join()
-# plt.plot(its, f_vals)
-# plt.xlabel("iteracijos")
-# plt.ylabel("tikslo funkcijos reikšmė")
-# plt.show()
+

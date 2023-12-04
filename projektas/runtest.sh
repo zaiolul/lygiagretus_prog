@@ -1,27 +1,28 @@
 #!/bin/sh
 MIN_PROC=1
 MAX_PROC=12
-AVG_COUNT=3
+AVG_COUNT=1
 OUT_FILE="results.txt"
 OUT_ONE="res-one.txt"
+export IFS=$' \t\r\n'  
 
-if [ "$#" -eq 2 ]; then
+if [ "$#" -eq 3 ]; then
     rm "$(pwd)/$OUT_ONE"
     echo "$1:" >> "$OUT_ONE"
     echo "pradėtas $1"
-    for p in $(seq $2 $MAX_PROC); do
+    for p in $(seq $2 $3); do
         sum=0.00
         for i in $(seq 1 $AVG_COUNT); do
-            result=$( { /usr/bin/time --format "%e" ./lp_proj.py -i $1 -p $p; } 2>&1 )
+            result=$( { /usr/bin/time --format "%e" ./lp_proj.py -i $1 -p $p; } 2>&1 ) 
+            
             sum=$(echo "$sum + $result" | bc -l)
-            echo $result
+
             
         done
-        echo $sum
         result=$(echo "scale=3; $sum / $AVG_COUNT" | bc -l)
 
-        [ "$p" -eq 1 ] && echo "Laikas su 1 procesu: $result"
-        echo -e "\t$p:\t$result" >> "$OUT_ONE"
+        echo "vid laikas $result"
+        echo -e "\t$p\t$result" >> "$OUT_ONE"
     done
     echo "baigtas $1"
     exit 1
