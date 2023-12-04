@@ -78,10 +78,9 @@ def parse_args():
                       help="Process count (default 4)", type=int)
     parser.add_argument("-i", required=True,
                       help="Input data file", type=str)
-    # parser.add_argument("-o", required=True,
-    #                   help="Output file", type=str)
     return parser.parse_args()
-    
+
+
 if __name__ == "__main__":
     args = parse_args()
     eps = 1e-8
@@ -93,21 +92,19 @@ if __name__ == "__main__":
     base_shops = np.array(data["base"])
     new_shops = np.array(data["new"])
     pool = Pool(args.p)
-    # print(len(base_shops), len(new_shops))
     # draw(base_shops, new_shops, limit)
 
     itmax = 1000
     step = 0.2
     h = 0.001
 
-    # fx = target(base_shops, new_shops, pool)
+    fx = target(base_shops, new_shops, pool)
   
     for i in range(itmax):
         gradient = numerical_gradient(base_shops, new_shops, h, pool)
         new_shops -=  step * gradient
         fx1 = target(base_shops, new_shops, pool)
-        # f_vals.append(fx1)
-        
+    
         if fx1 > fx:
             new_shops +=  step * gradient
             step = step * 0.9
@@ -116,8 +113,7 @@ if __name__ == "__main__":
         if step < eps:
             break
 
-    # # draw(base_shops, new_shops, limit)
-    # # print(new_shops)
+    # draw(base_shops, new_shops, limit)
     pool.close()
     pool.join()
 
