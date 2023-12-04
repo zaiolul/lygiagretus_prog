@@ -93,7 +93,7 @@ if __name__ == "__main__":
     base_shops = np.array(data["base"])
     new_shops = np.array(data["new"])
     pool = Pool(args.p)
-    print(len(base_shops), len(new_shops))
+    # print(len(base_shops), len(new_shops))
     # draw(base_shops, new_shops, limit)
 
     itmax = 1000
