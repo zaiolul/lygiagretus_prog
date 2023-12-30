@@ -105,12 +105,12 @@ file_path = "{0}/{1}".format(os.path.dirname(os.path.realpath(__file__)),args.fi
 if os.path.isfile(file_path):
     os.remove(file_path)
 
-n = len(car_list)
+n = args.count
+if len(car_list) < n:   
+    n = len(car_list)
 
-if args.count < n:
-    n = args.count
 
-for i in range(n):
+for i in range(args.count):
     year = random.randint(2000, 2020)
     volume = (float)(random.randint(1,3)) + random.choice([0, 0.5, 0.6])
    
